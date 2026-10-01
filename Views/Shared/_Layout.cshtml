@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index", "Home")">Novedades</a>
+                </li>
+
+                @if (Context.Session.GetString("UsuarioLogueado") == null)
+                {
+                    <li>
+                        <a href="@Url.Action("IniciarSesion", "Home")">Acceder</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Registrarse", "Home")">Crear cuenta</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        @Context.Session.GetString("NombreUsuarioLogueado")
+                    </li>
+                    <li>
+                        <a href="@Url.Action("CerrarSesion", "Home")">Salir</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <script src="/js/site.js"></script>
+</body>
+</html>

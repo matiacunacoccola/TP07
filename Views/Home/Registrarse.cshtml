@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Sumate al patio";
+}
+
+<section class="registro">
+    <h1>Sumate al patio</h1>
+
+    <p class="error" id="errorRegistro">@ViewBag.Error</p>
+
+    <form action='@Url.Action("Registrarse", "Home")'
+          method="POST"
+          onsubmit="return comprobarFormulario()">
+
+        <p>Elegí tu usuario (4 caracteres o más)</p>
+        <input type="text" name="NombreUsuario" id="nombreUsuario" maxlength="50" required />
+
+        <p>Elegí tu clave (6 caracteres o más)</p>
+        <input type="password" name="Contrasena" id="contrasena" maxlength="50" required />
+
+        <p>Tu nombre</p>
+        <input type="text" name="Nombre" id="nombre" maxlength="50" required />
+
+        <p>Tu apellido</p>
+        <input type="text" name="Apellido" id="apellido" maxlength="50" required />
+
+        <p>Tu vínculo con la comunidad</p>
+        <select name="TipoUsuario" id="tipoUsuario" required>
+            <option value="">Elegí una opción</option>
+            <option value="Alumno">Alumno</option>
+            <option value="Docente">Docente</option>
+            <option value="Coordinador">Coordinador</option>
+            <option value="Padre">Padre</option>
+        </select>
+
+        <button type="reset">Borrar campos</button>
+        <button type="submit">Crear mi cuenta</button>
+    </form>
+</section>

@@ -1,0 +1,146 @@
+@{
+    ViewData["Title"] = "El patio";
+}
+
+<section class="inicio">
+    <h1>El patio</h1>
+
+    @if (ViewBag.UsuarioLogueado != null)
+    {
+        <p>Hola, @ViewBag.NombreUsuario</p>
+
+        <div class="crear-publicacion">
+            <h2>Dejá tu novedad</h2>
+
+            <form action='@Url.Action("CrearPublicacion", "Home")' method="POST">
+                <p>Un título para tu idea</p>
+                <input type="text" name="titulo" maxlength="200" required />
+
+                <p>Contanos un poco más</p>
+                <textarea name="descripcion" rows="3" required></textarea>
+
+                <p>Elegí una imagen</p>
+                <select name="imagen" required>
+                    <option value="">Seleccioná una foto</option>
+                    <option value="atardecer.jpg">Atardecer</option>
+                    <option value="bariloche.jpg">Bariloche</option>
+                    <option value="futbol.jpg">Fútbol</option>
+                </select>
+
+                <button type="submit">Compartir</button>
+            </form>
+        </div>
+
+        <input type="hidden" id="estadoSesion" value="si" />
+    }
+    else
+    {
+        <p>Entrá a tu cuenta para sumar novedades y participar.</p>
+        <input type="hidden" id="estadoSesion" value="no" />
+    }
+
+    <div class="lista-publicaciones">
+        <p class="error" id="mensajeAcciones"></p>
+
+        <div id="listaPublicaciones">
+            @foreach (Publicacion publicacion in ViewBag.Publicaciones)
+            {
+                <div class="publicacion">
+                    <h2>@publicacion.Titulo</h2>
+
+                    <p>@publicacion.NombreUsuario - @publicacion.FechaPublicacion</p>
+
+                    <img src="/img/publicaciones/@publicacion.Imagen"
+                         alt="Foto compartida" />
+
+                    <p>@publicacion.Descripcion</p>
+
+                    <p id="cantidadMeGusta@(publicacion.Id)">
+                        Me Gusta: @publicacion.CantidadMeGusta
+                    </p>
+
+                    @if (ViewBag.UsuarioLogueado != null)
+                    {
+                        if (publicacion.YaLeGusto)
+                        {
+                            <button type="button"
+                                    id="botonMeGusta@(publicacion.Id)"
+                                    onclick="cambiarReaccion(@publicacion.Id)">
+                                Ya no me gusta
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button"
+                                    id="botonMeGusta@(publicacion.Id)"
+                                    onclick="cambiarReaccion(@publicacion.Id)">
+                                Me Gusta
+                            </button>
+                        }
+                    }
+
+                    <h3>Conversación</h3>
+
+                    <div id="comentarios@(publicacion.Id)">
+                        @foreach (Comentario comentario in publicacion.Comentarios)
+                        {
+                            <div class="comentario">
+                                <p>@comentario.NombreUsuario - @comentario.FechaComentario</p>
+                                <p>@comentario.Texto</p>
+                            </div>
+                        }
+                    </div>
+
+                    @if (ViewBag.UsuarioLogueado != null)
+                    {
+                        <textarea id="textoComentario@(publicacion.Id)"
+                                  rows="2"
+                                  placeholder="Sumá tu opinión"></textarea>
+
+                        <button type="button"
+                                id="botonComentar@(publicacion.Id)"
+                                onclick="enviarComentario(@publicacion.Id)">
+                            Comentar
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+
+        @if (ViewBag.Publicaciones.Count == 10)
+        {
+            <button type="button"
+                    id="botonVerMas"
+                    onclick="cargarMas()">
+                Ver más
+            </button>
+        }
+    </div>
+</section>
+
+<div id="plantillaPublicacion" class="publicacion" style="display: none;">
+    <h2 class="titulo"></h2>
+    <p class="autor"></p>
+    <img class="foto" alt="Foto compartida" />
+    <p class="descripcion"></p>
+    <p class="cantidad"></p>
+
+    <button type="button" class="botonReaccion">Me Gusta</button>
+
+    <h3>Conversación</h3>
+
+    <div class="comentariosPublicacion"></div>
+
+    <div class="escribirComentario">
+        <textarea class="textoNuevo"
+                  rows="2"
+                  placeholder="Sumá tu opinión"></textarea>
+
+        <button type="button" class="botonComentar">Comentar</button>
+    </div>
+</div>
+
+<div id="plantillaComentario" class="comentario" style="display: none;">
+    <p class="autorComentario"></p>
+    <p class="textoComentario"></p>
+</div>
