@@ -7,7 +7,7 @@ public class Usuario
     public string Contrasena { get; set; }
     public string Nombre { get; set; }
     public string Apellido { get; set; }
-    public string TipoUsuario { get; set; }
+    
 
     public Usuario()
     {
@@ -16,6 +16,6 @@ public class Usuario
         Contrasena = "";
         Nombre = "";
         Apellido = "";
-        TipoUsuario = "";
+    
     }
 }

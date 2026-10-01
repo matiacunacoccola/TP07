@@ -4,7 +4,6 @@ function comprobarFormulario()
     const clave = document.getElementById("contrasena").value;
     const nombre = document.getElementById("nombre").value;
     const apellido = document.getElementById("apellido").value;
-    const tipo = document.getElementById("tipoUsuario").value;
 
     let mensaje = "";
 
@@ -24,16 +23,11 @@ function comprobarFormulario()
     {
         mensaje = "Revisá tu apellido: usá letras y espacios.";
     }
-    else if (tipo == "")
-    {
-        mensaje = "Indicá tu vínculo con la comunidad.";
-    }
 
     document.getElementById("errorRegistro").innerHTML = mensaje;
 
     return mensaje == "";
 }
-
 function soloLetras(texto)
 {
     const letras = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZáéíóúÁÉÍÓÚñÑ ";

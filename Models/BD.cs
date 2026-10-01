@@ -7,25 +7,24 @@ public class BD
 {
     private string connectiontostring = @"Server=localhost;DataBase=DBRedSocial;Integrated Security=True;TrustServerCertificate=True;";
 
-    public void GuardarUsuario(Usuario usuario)
-    {
-        string consulta = @"INSERT INTO Usuarios
-                            (NombreUsuario, Contraseña, Nombre, Apellido, TipoUsuario)
-                            VALUES
-                            (@NombreUsuario, @Contrasena, @Nombre, @Apellido, @TipoUsuario)";
+public void GuardarUsuario(Usuario usuario)
+{
+    string consulta = @"INSERT INTO Usuarios
+                        (NombreUsuario, Contraseña, Nombre, Apellido)
+                        VALUES
+                        (@NombreUsuario, @Contrasena, @Nombre, @Apellido)";
 
-        using (SqlConnection conexion = new SqlConnection(connectiontostring))
+    using (SqlConnection conexion = new SqlConnection(connectiontostring))
+    {
+        conexion.Execute(consulta, new
         {
-            conexion.Execute(consulta, new
-            {
-                NombreUsuario = usuario.NombreUsuario,
-                Contrasena = usuario.Contrasena,
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                TipoUsuario = usuario.TipoUsuario
-            });
-        }
+            NombreUsuario = usuario.NombreUsuario,
+            Contrasena = usuario.Contrasena,
+            Nombre = usuario.Nombre,
+            Apellido = usuario.Apellido
+        });
     }
+}
 
     public bool NombreRegistrado(string nombreUsuario)
     {

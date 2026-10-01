@@ -21,6 +21,6 @@ public class SesionUsuario
         sesion.SetString("NombreUsuarioLogueado", usuario.NombreUsuario);
         sesion.SetString("NombreLogueado", usuario.Nombre);
         sesion.SetString("ApellidoLogueado", usuario.Apellido);
-        sesion.SetString("TipoUsuarioLogueado", usuario.TipoUsuario);
+    
     }
 }
