@@ -138,75 +138,82 @@ function cargarMas()
 
 function mostrarPublicacion(publicacion)
 {
-    const tarjeta = document.getElementById("plantillaPublicacion").cloneNode(true);
+    let usuarioLogueado = document.getElementById("estadoSesion").value;
+    let contenido = "";
 
-    tarjeta.id = "publicacion" + publicacion.id;
-    tarjeta.style.display = "block";
+    contenido = contenido + "<div class='publicacion'>";
+    contenido = contenido + "<h2>" + publicacion.titulo + "</h2>";
 
-    tarjeta.querySelector(".titulo").textContent = publicacion.titulo;
+    contenido = contenido + "<p>" + publicacion.nombreUsuario +
+        " - " + publicacion.fechaPublicacion + "</p>";
 
-    tarjeta.querySelector(".autor").textContent =
-        publicacion.nombreUsuario + " - " + publicacion.fechaPublicacion;
+    contenido = contenido + "<img src='/img/publicaciones/" +
+        publicacion.imagen + "' alt='Foto compartida'>";
 
-    tarjeta.querySelector(".foto").src =
-        "/img/publicaciones/" + publicacion.imagen;
+    contenido = contenido + "<p>" + publicacion.descripcion + "</p>";
 
-    tarjeta.querySelector(".descripcion").textContent =
-        publicacion.descripcion;
+    contenido = contenido + "<p id='cantidadMeGusta" + publicacion.id +
+        "'>Me Gusta: " + publicacion.cantidadMeGusta + "</p>";
 
-    const cantidad = tarjeta.querySelector(".cantidad");
-
-    cantidad.id = "cantidadMeGusta" + publicacion.id;
-    cantidad.textContent = "Me Gusta: " + publicacion.cantidadMeGusta;
-
-    const botonReaccion = tarjeta.querySelector(".botonReaccion");
-
-    botonReaccion.id = "botonMeGusta" + publicacion.id;
-    botonReaccion.onclick = () => cambiarReaccion(publicacion.id);
-
-    if (publicacion.yaLeGusto)
+    if (usuarioLogueado == "si")
     {
-        botonReaccion.textContent = "Ya no me gusta";
+        if (publicacion.yaLeGusto == true)
+        {
+            contenido = contenido + "<button type='button' id='botonMeGusta" +
+                publicacion.id + "' onclick='cambiarReaccion(" +
+                publicacion.id + ")'>Ya no me gusta</button>";
+        }
+        else
+        {
+            contenido = contenido + "<button type='button' id='botonMeGusta" +
+                publicacion.id + "' onclick='cambiarReaccion(" +
+                publicacion.id + ")'>Me Gusta</button>";
+        }
     }
 
-    tarjeta.querySelector(".comentariosPublicacion").id =
-        "comentarios" + publicacion.id;
+    contenido = contenido + "<h3>Conversación</h3>";
+    contenido = contenido + "<div id='comentarios" + publicacion.id + "'>";
 
-    tarjeta.querySelector(".textoNuevo").id =
-        "textoComentario" + publicacion.id;
-
-    const botonComentar = tarjeta.querySelector(".botonComentar");
-
-    botonComentar.id = "botonComentar" + publicacion.id;
-    botonComentar.onclick = () => enviarComentario(publicacion.id);
-
-    if (document.getElementById("estadoSesion").value == "no")
+    for (let i = 0; i < publicacion.comentarios.length; i++)
     {
-        botonReaccion.style.display = "none";
+        let comentario = publicacion.comentarios[i];
 
-        tarjeta.querySelector(".escribirComentario").style.display = "none";
+        contenido = contenido + "<div class='comentario'>";
+        contenido = contenido + "<p>" + comentario.nombreUsuario +
+            " - " + comentario.fechaComentario + "</p>";
+        contenido = contenido + "<p>" + comentario.texto + "</p>";
+        contenido = contenido + "</div>";
     }
 
-    document.getElementById("listaPublicaciones").appendChild(tarjeta);
+    contenido = contenido + "</div>";
 
-    publicacion.comentarios.forEach(comentario =>
+    if (usuarioLogueado == "si")
     {
-        mostrarComentario(comentario, publicacion.id);
-    });
+        contenido = contenido + "<textarea id='textoComentario" +
+            publicacion.id +
+            "' rows='2' placeholder='Sumá tu opinión'></textarea>";
+
+        contenido = contenido + "<button type='button' id='botonComentar" +
+            publicacion.id + "' onclick='enviarComentario(" +
+            publicacion.id + ")'>Comentar</button>";
+    }
+
+    contenido = contenido + "</div>";
+
+    document.getElementById("listaPublicaciones").innerHTML =
+        document.getElementById("listaPublicaciones").innerHTML + contenido;
 }
 
 function mostrarComentario(comentario, idPublicacion)
 {
-    const nuevo = document.getElementById("plantillaComentario").cloneNode(true);
+    let contenido = "";
 
-    nuevo.id = "";
-    nuevo.style.display = "block";
+    contenido = contenido + "<div class='comentario'>";
+    contenido = contenido + "<p>" + comentario.nombreUsuario +
+        " - " + comentario.fechaComentario + "</p>";
+    contenido = contenido + "<p>" + comentario.texto + "</p>";
+    contenido = contenido + "</div>";
 
-    nuevo.querySelector(".autorComentario").textContent =
-        comentario.nombreUsuario + " - " + comentario.fechaComentario;
-
-    nuevo.querySelector(".textoComentario").textContent =
-        comentario.texto;
-
-    document.getElementById("comentarios" + idPublicacion).appendChild(nuevo);
+    document.getElementById("comentarios" + idPublicacion).innerHTML =
+        document.getElementById("comentarios" + idPublicacion).innerHTML + contenido;
 }
